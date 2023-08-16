@@ -1,6 +1,6 @@
 1. Contact List (both parts):
 
-- https://github.com/Karwan87/goit-node-hw-01/blob/main/console%20screenshot/contacts%20list%201.png
+- <a>https://github.com/Karwan87/goit-node-hw-01/blob/main/console%20screenshot/contacts%20list%201.png</a>
 - https://github.com/Karwan87/goit-node-hw-01/blob/main/console%20screenshot/contacts%20list%202.png
 
 2. Add New Contact:
