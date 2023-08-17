@@ -1,27 +1,5 @@
 const contacts = require("./contacts");
 
-// show contacts list
-// console.time("listContacts");
-// contacts.listContacts();
-// console.timeEnd("listContacts");
-
-// OPERATORS - UNCOMMENT SINGLE TO CHECK THE FUNCTIONS IS WORKING
-
-// add new contact
-// console.time("addContact");
-// contacts.addContact("Nowy Kontakt", "nowy@example.com", "123456789");
-// console.timeEnd("addContact");
-
-// get contact by id
-// console.time("getContactById");
-// contacts.getContactById("rsKkOQUi80UsgVPCcLZZW");
-// console.timeEnd("getContactById");
-
-// delete contact by id
-// console.time("removeContact");
-// contacts.removeContact(1692211841855);
-// console.timeEnd("removeContact");
-
 const { Command } = require("commander");
 const program = new Command();
 
@@ -37,7 +15,7 @@ program.parse(process.argv);
 const argv = program.opts();
 
 function invokeAction({ action, id, name, email, phone }) {
-  const contacts = require("./contacts"); // Import modułu contacts.js
+  const contacts = require("./contacts");
 
   switch (action) {
     case "list":
