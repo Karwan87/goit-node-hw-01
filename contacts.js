@@ -1,31 +1,34 @@
 const fs = require("fs");
 const path = require("path");
-const fsPromises = require("fs").promises;
 
 const contactsPath = path.join(__dirname, "db", "contacts.json");
 console.log("./db/contacts.json", contactsPath);
 
-// loading contacts
-
-function listContacts() {
+function readContactsFile(callback) {
   fs.readFile(contactsPath, "utf-8", (err, data) => {
     if (err) {
       console.error("Błąd odczytu pliku contacts.json:", err);
+      callback(err);
       return;
     }
-    console.log("Kontakty:", JSON.parse(data));
+    callback(null, JSON.parse(data));
   });
 }
 
-// loading contacts by ID
+function listContacts() {
+  readContactsFile((err, contacts) => {
+    if (!err) {
+      console.log("Kontakty:", contacts);
+    }
+  });
+}
+
 function getContactById(contactId) {
-  fs.readFile(contactsPath, "utf-8", (err, data) => {
+  readContactsFile((err, contacts) => {
     if (err) {
-      console.error("Błąd odczytu pliku contacts.json:", err);
       return;
     }
 
-    const contacts = JSON.parse(data);
     const contact = contacts.find((item) => item.id === contactId);
 
     if (!contact) {
@@ -37,39 +40,36 @@ function getContactById(contactId) {
   });
 }
 
-// delete contacts by ID
 function removeContact(contactId) {
   console.log("Rozpoczęto usuwanie kontaktu o ID:", contactId);
 
-  fs.readFile(contactsPath, "utf-8", (err, data) => {
+  readContactsFile((err, contacts) => {
     if (err) {
-      console.error("Błąd odczytu pliku contacts.json:", err);
       return;
     }
 
-    const contacts = JSON.parse(data);
     const updatedContacts = contacts.filter((item) => item.id !== contactId);
-    fsPromises
-      .writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2))
-      .then(() => {
+
+    fs.writeFile(
+      contactsPath,
+      JSON.stringify(updatedContacts, null, 2),
+      (err) => {
+        if (err) {
+          console.error("Błąd zapisu pliku contacts.json:", err);
+          return;
+        }
         console.log("Usunięto kontakt o ID", contactId);
-      })
-      .catch((err) => {
-        console.error("Błąd zapisu pliku contacts.json:", err);
-      });
+      }
+    );
   });
 }
 
-// creating new contacts
-
 function addContact(name, email, phone) {
-  fs.readFile(contactsPath, "utf-8", (err, data) => {
+  readContactsFile((err, contacts) => {
     if (err) {
-      console.error("Błąd odczytu pliku contacts.json:", err);
       return;
     }
 
-    const contacts = JSON.parse(data);
     const newContact = { id: Date.now().toString(), name, email, phone };
     contacts.push(newContact);
 
@@ -83,5 +83,4 @@ function addContact(name, email, phone) {
   });
 }
 
-// functions export
 module.exports = { listContacts, getContactById, removeContact, addContact };
