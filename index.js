@@ -15,7 +15,6 @@ program.parse(process.argv);
 const argv = program.opts();
 
 function invokeAction({ action, id, name, email, phone }) {
-  const contacts = require("./contacts");
 
   switch (action) {
     case "list":
